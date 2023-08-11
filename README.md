@@ -1,5 +1,6 @@
 A customizable segmented progress bar.
 
+![segmented_progress_bar](https://github.com/marjandn/segmented_progress_bar/assets/25709266/fb8c9a72-466a-4d2e-a2b1-fc86a36324b0)
 
 
 ## Installation

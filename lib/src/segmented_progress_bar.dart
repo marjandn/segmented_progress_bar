@@ -59,7 +59,16 @@ class _ProgressBarPainter extends CustomPainter {
       final segmentWidth = (segment.value / totalValue) * barWidth;
       final paint = Paint()..color = segment.color;
 
-      if (i == 0) {
+      if (segments.length == 1) {
+        final roundedRect = RRect.fromRectAndCorners(
+          Rect.fromLTWH(currentProgress, 0, segmentWidth, size.height),
+          topLeft: Radius.circular(borderRadius),
+          topRight: Radius.circular(borderRadius),
+          bottomLeft: Radius.circular(borderRadius),
+          bottomRight: Radius.circular(borderRadius),
+        );
+        canvas.drawRRect(roundedRect, paint);
+      } else if (i == 0) {
         final roundedRect = RRect.fromRectAndCorners(
           Rect.fromLTWH(currentProgress, 0, segmentWidth, size.height),
           topLeft: Radius.circular(borderRadius),
@@ -89,7 +98,6 @@ class _ProgressBarPainter extends CustomPainter {
       textPainter.layout();
 
       final centerX = currentProgress + segmentWidth / 2;
-      final centerY = size.height / 2;
 
       final dx = switch (segment.labelPosition) {
         LabelPosition.center => centerX - textPainter.width / 2,

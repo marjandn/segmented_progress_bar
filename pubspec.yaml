@@ -1,6 +1,6 @@
 name: segmented_progress_bar
 description: A customizable segmented progress bar
-version: 0.0.1
+version: 1.0.0
 homepage: https://github.com/marjandn/segmented_progress_bar
 
 environment:

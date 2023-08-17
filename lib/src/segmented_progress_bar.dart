@@ -52,6 +52,8 @@ class _ProgressBarPainter extends CustomPainter {
     double totalValue = segments.fold(0.0, (sum, segment) => sum + segment.value);
 
     double currentProgress = 0.0;
+    double previousSegmentEnd = 0.0; // Track the end of the previous segment
+
     double barWidth = size.width;
 
     for (var i = 0; i < segments.length; i++) {
@@ -105,9 +107,21 @@ class _ProgressBarPainter extends CustomPainter {
         LabelPosition.end => currentProgress + segmentWidth - textPainter.width,
       };
 
-      final labelOffset = Offset(
-          dx, ((segment.isAbove) ? -size.height - segment.labelPadding : size.height + segment.labelPadding));
+      bool isAbove = segment.isAbove;
+      double labelPadding = segment.labelPadding;
+
+      /// If the label and the previous position interfere with the starting position of the current label
+      /// The label will placed top/bottom according to previous lable position
+      if (currentProgress != previousSegmentEnd && i > 0) {
+        isAbove = !segments[i - 1].isAbove;
+        labelPadding = labelPadding * 4;
+      }
+
+      final labelOffset =
+          Offset(dx, isAbove ? -size.height - labelPadding : size.height + labelPadding);
       textPainter.paint(canvas, labelOffset);
+
+      previousSegmentEnd = currentProgress + segmentWidth + 20; // Update the previous segment's end
 
       currentProgress += segmentWidth;
     }

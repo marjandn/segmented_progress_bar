@@ -1,10 +1,10 @@
 name: segmented_progress_bar
 description: A customizable segmented progress bar
-version: 1.0.0
+version: 1.1.0
 homepage: https://github.com/marjandn/segmented_progress_bar
 
 environment:
-  sdk: '>=3.0.6 <4.0.0'
+  sdk: ">=3.0.6 <4.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
@@ -16,39 +16,4 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^2.0.0
 
-
-
-
-
 flutter:
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  

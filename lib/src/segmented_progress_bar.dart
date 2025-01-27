@@ -10,8 +10,7 @@ class SegmentedProgressBar extends StatelessWidget {
     super.key,
     required this.segments,
     this.height = 20,
-    this.borderRadius = 5.0,
-    this.triangleIndicator = false
+    this.borderRadius = 5.0
   });
 
   /// List of segments in the progress bar
@@ -25,8 +24,6 @@ class SegmentedProgressBar extends StatelessWidget {
   /// Defaults to 5
   final double borderRadius;
 
-  final bool triangleIndicator;
-
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -34,8 +31,7 @@ class SegmentedProgressBar extends StatelessWidget {
         painter: _ProgressBarPainter(
           segments: segments,
           borderRadius: borderRadius,
-          barHeight: height,
-          triangleIndicator: triangleIndicator
+          barHeight: height
         ),
         child: Container(
           height: height,
@@ -49,13 +45,11 @@ class _ProgressBarPainter extends CustomPainter {
   final List<ProgressSegment> segments;
   final double borderRadius;
   final double barHeight;
-  final bool triangleIndicator;
 
   _ProgressBarPainter({
     required this.segments,
     required this.borderRadius,
-    required this.barHeight,
-    required this.triangleIndicator
+    required this.barHeight
   });
 
   @override
@@ -144,7 +138,7 @@ class _ProgressBarPainter extends CustomPainter {
       final triangleBaseWidth = sqrt( pow(barHeight, 2) + pow(barHeight,2));
       final triangleHeight = sqrt(pow(barHeight,2) - pow(triangleBaseWidth /2,2));
 
-      if(triangleIndicator){
+      if(segment.triangleIndicator){
 
         final trianglePath = Path();
         trianglePath.moveTo(centerX, isAbove ? -triangleHeight-1 : barHeight + triangleHeight);
@@ -162,8 +156,8 @@ class _ProgressBarPainter extends CustomPainter {
       final labelOffset = Offset(
         dx,
         isAbove
-            ? -size.height - (triangleIndicator ? triangleHeight : 0) - labelPadding
-            : size.height + (triangleIndicator ? triangleHeight : 0) + labelPadding,
+            ? -size.height - (segment.triangleIndicator ? triangleHeight : 0) - labelPadding
+            : size.height + (segment.triangleIndicator ? triangleHeight : 0) + labelPadding,
       );
 
       textPainter.paint(canvas, labelOffset);

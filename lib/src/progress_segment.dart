@@ -10,6 +10,7 @@ class ProgressSegment {
   final LabelPosition labelPosition;
   final double labelPadding;
   final TextStyle labelTextStyle;
+  final bool triangleIndicator;
 
   ProgressSegment({
     required this.value,
@@ -19,6 +20,7 @@ class ProgressSegment {
     this.labelPosition = LabelPosition.center,
     this.labelPadding = 5,
     this.labelTextStyle = const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+    this.triangleIndicator = false
   });
 
 }

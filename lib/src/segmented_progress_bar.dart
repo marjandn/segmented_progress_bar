@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import 'label_position.dart';
@@ -8,7 +10,7 @@ class SegmentedProgressBar extends StatelessWidget {
     super.key,
     required this.segments,
     this.height = 20,
-    this.borderRadius = 5.0,
+    this.borderRadius = 5.0
   });
 
   /// List of segments in the progress bar
@@ -29,6 +31,7 @@ class SegmentedProgressBar extends StatelessWidget {
         painter: _ProgressBarPainter(
           segments: segments,
           borderRadius: borderRadius,
+          barHeight: height
         ),
         child: Container(
           height: height,
@@ -41,10 +44,12 @@ class SegmentedProgressBar extends StatelessWidget {
 class _ProgressBarPainter extends CustomPainter {
   final List<ProgressSegment> segments;
   final double borderRadius;
+  final double barHeight;
 
   _ProgressBarPainter({
     required this.segments,
     required this.borderRadius,
+    required this.barHeight
   });
 
   @override
@@ -112,13 +117,49 @@ class _ProgressBarPainter extends CustomPainter {
 
       /// If the label and the previous position interfere with the starting position of the current label
       /// The label will placed top/bottom according to previous lable position
-      if (currentProgress != previousSegmentEnd && i > 0) {
-        isAbove = !segments[i - 1].isAbove;
-        labelPadding = labelPadding * 4;
+      if (i > 0) {
+        final previousTextPainter = TextPainter(
+          text: TextSpan(text: segments[i - 1].label, style: segments[i - 1].labelTextStyle),
+          textDirection: TextDirection.ltr,
+        );
+        previousTextPainter.layout();
+
+        final previousTextEnd = previousSegmentEnd;
+        final currentTextStart = dx;
+
+        if (currentTextStart - previousTextEnd > 5) {
+          isAbove = segments[i].isAbove;
+        } else {
+          isAbove = !segments[i - 1].isAbove;
+        }
       }
 
-      final labelOffset =
-          Offset(dx, isAbove ? -size.height - labelPadding : size.height + labelPadding);
+
+      final triangleBaseWidth = sqrt( pow(barHeight, 2) + pow(barHeight,2));
+      final triangleHeight = sqrt(pow(barHeight,2) - pow(triangleBaseWidth /2,2));
+
+      if(segment.triangleIndicator){
+
+        final trianglePath = Path();
+        trianglePath.moveTo(centerX, isAbove ? -triangleHeight-1 : barHeight + triangleHeight);
+        trianglePath.lineTo(centerX - triangleBaseWidth / 2,
+            isAbove ? -1 : barHeight);
+        trianglePath.lineTo(centerX + triangleBaseWidth / 2,
+            isAbove ? -1 : barHeight );
+        trianglePath.close();
+
+        final trianglePaint = Paint()..color = segment.color;
+        canvas.drawPath(trianglePath, trianglePaint);
+
+      }
+
+      final labelOffset = Offset(
+        dx,
+        isAbove
+            ? -size.height - (segment.triangleIndicator ? triangleHeight : 0) - labelPadding
+            : size.height + (segment.triangleIndicator ? triangleHeight : 0) + labelPadding,
+      );
+
       textPainter.paint(canvas, labelOffset);
 
       previousSegmentEnd = currentProgress + segmentWidth + 20; // Update the previous segment's end
